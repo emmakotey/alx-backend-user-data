@@ -44,8 +44,8 @@ def users() -> str:
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> str:
     """
-    Authenticate user credentials, enable login if correct and establish a new 
-    session.
+    Authenticate user credentials, enable login if correct
+    and establish a session.
     """
     email = request.form.get("email")
     password = request.form.get("password")
