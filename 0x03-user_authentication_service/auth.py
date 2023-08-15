@@ -18,9 +18,7 @@ U = TypeVar(User)
 
 def _hash_password(password: str) -> bytes:
     """
-    Hashes a password string and returns it in bytes form
-    Args:
-        password (str): password in string format
+    Hashes a password string and returns it in bytes for user
     """
     passwd = password.encode('utf-8')
     return bcrypt.hashpw(passwd, bcrypt.gensalt())
@@ -43,12 +41,6 @@ class Auth:
     def register_user(self, email: str, password: str) -> User:
         """
         Register a new user and return a user object
-        Args:
-            email (str): new user's email address
-            password (str): new user's password
-        Return:
-            if no user with given email exists, return newly created user
-            else raise ValueError
         """
         try:
             self._db.find_user_by(email=email)
@@ -62,11 +54,6 @@ class Auth:
         """
         Validate a user's login credentials and return True if they are correct
         or False if they are not
-        Args:
-            email (str): user's email address
-            password (str): user's password
-        Return:
-            True if credentials are correct, else False
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -81,8 +68,6 @@ class Auth:
         """
         Create a session_id for an existing user and update the user's
         session_id attribute
-        Args:
-            email (str): user's email address
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -97,10 +82,6 @@ class Auth:
         """
         Takes a session_id and returns the corresponding user, if one exists,
         else returns None
-        Args:
-            session_id (str): session id for user
-        Return:
-            user object if found, else None
         """
         if session_id is None:
             return None
@@ -116,10 +97,6 @@ class Auth:
         """
         Take a user_id and destroy that user's session and update their
         session_id attribute to None
-        Args:
-            user_id (int): user's id
-        Return:
-            None
         """
         try:
             self._db.update_user(user_id, session_id=None)
@@ -130,10 +107,6 @@ class Auth:
     def get_reset_password_token(self, email: str) -> str:
         """
         Generates a reset_token uuid for a user identified by the given email
-        Args:
-            email (str): user's email address
-        Return:
-            newly generated reset_token for the relevant user
         """
         try:
             user = self._db.find_user_by(email=email)
@@ -147,11 +120,6 @@ class Auth:
     def update_password(self, reset_token: str, password: str) -> None:
         """
         Updates a user's password
-        Args:
-            reset_token (str): reset_token issued to reset the password
-            password (str): user's new password
-        Return:
-            None
         """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
